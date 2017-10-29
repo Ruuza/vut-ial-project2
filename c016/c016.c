@@ -1,4 +1,3 @@
-
 /* c016.c: **********************************************************}
 {* Téma:  Tabulka s Rozptýlenými Položkami
 **                      První implementace: Petr Přikryl, prosinec 1994
@@ -7,6 +6,7 @@
 **                              Radek Hranický, říjen 2014
 **                              Radek Hranický, listopad 2015
 **                              Radek Hranický, říjen 2016
+**                      Implementace: Dominik Harmim <xharmi00@stud.fit.vutbr.cz>, říjen 2017
 **
 ** Vytvořete abstraktní datový typ
 ** TRP (Tabulka s Rozptýlenými Položkami = Hash table)
@@ -31,7 +31,7 @@
 ** ukazatele na další synonymum 'ptrnext'. Při implementaci funkcí
 ** uvažujte maximální rozměr pole HTSIZE.
 **
-** U všech procedur využívejte rozptylovou funkci hashCode.  Povšimněte si
+** U všech procedur využívejte rozptylovou funkci hashCode. Povšimněte si
 ** způsobu předávání parametrů a zamyslete se nad tím, zda je možné parametry
 ** předávat jiným způsobem (hodnotou/odkazem) a v případě, že jsou obě
 ** možnosti funkčně přípustné, jaké jsou výhody či nevýhody toho či onoho
@@ -43,63 +43,71 @@
 
 #include "c016.h"
 
+
 int HTSIZE = MAX_HTSIZE;
 int solved;
 
+
 /*          -------
 ** Rozptylovací funkce - jejím úkolem je zpracovat zadaný klíč a přidělit
-** mu index v rozmezí 0..HTSize-1.  V ideálním případě by mělo dojít
-** k rovnoměrnému rozptýlení těchto klíčů po celé tabulce.  V rámci
-** pokusů se můžete zamyslet nad kvalitou této funkce.  (Funkce nebyla
+** mu index v rozmezí 0..HTSize-1. V ideálním případě by mělo dojít
+** k rovnoměrnému rozptýlení těchto klíčů po celé tabulce. V rámci
+** pokusů se můžete zamyslet nad kvalitou této funkce. (Funkce nebyla
 ** volena s ohledem na maximální kvalitu výsledku). }
 */
-
-int hashCode ( tKey key ) {
+int hashCode(tKey key)
+{
 	int retval = 1;
-	int keylen = strlen(key);
-	for ( int i=0; i<keylen; i++ )
+	int keylen = (int) strlen(key);
+	for (int i = 0; i < keylen; i++)
+	{
 		retval += key[i];
-	return ( retval % HTSIZE );
+	}
+	return (retval % HTSIZE);
 }
+
 
 /*
-** Inicializace tabulky s explicitně zřetězenými synonymy.  Tato procedura
+** Inicializace tabulky s explicitně zřetězenými synonymy. Tato procedura
 ** se volá pouze před prvním použitím tabulky.
 */
+void htInit(tHTable *ptrht)
+{
 
-void htInit ( tHTable* ptrht ) {
-
- solved = 0; /*v pripade reseni, smazte tento radek!*/
+	solved = 0; /*v pripade reseni, smazte tento radek!*/
 }
 
+
 /* TRP s explicitně zřetězenými synonymy.
-** Vyhledání prvku v TRP ptrht podle zadaného klíče key.  Pokud je
+** Vyhledání prvku v TRP ptrht podle zadaného klíče key. Pokud je
 ** daný prvek nalezen, vrací se ukazatel na daný prvek. Pokud prvek nalezen není, 
 ** vrací se hodnota NULL.
 **
 */
+tHTItem *htSearch(tHTable *ptrht, tKey key)
+{
 
-tHTItem* htSearch ( tHTable* ptrht, tKey key ) {
-
- solved = 0; /*v pripade reseni, smazte tento radek!*/
+	solved = 0; /*v pripade reseni, smazte tento radek!*/
 }
+
 
 /* 
 ** TRP s explicitně zřetězenými synonymy.
 ** Tato procedura vkládá do tabulky ptrht položku s klíčem key a s daty
-** data.  Protože jde o vyhledávací tabulku, nemůže být prvek se stejným
-** klíčem uložen v tabulce více než jedenkrát.  Pokud se vkládá prvek,
+** data. Protože jde o vyhledávací tabulku, nemůže být prvek se stejným
+** klíčem uložen v tabulce více než jedenkrát. Pokud se vkládá prvek,
 ** jehož klíč se již v tabulce nachází, aktualizujte jeho datovou část.
 **
-** Využijte dříve vytvořenou funkci htSearch.  Při vkládání nového
+** Využijte dříve vytvořenou funkci htSearch. Při vkládání nového
 ** prvku do seznamu synonym použijte co nejefektivnější způsob,
 ** tedy proveďte.vložení prvku na začátek seznamu.
 **/
+void htInsert(tHTable *ptrht, tKey key, tData data)
+{
 
-void htInsert ( tHTable* ptrht, tKey key, tData data ) {
-
- solved = 0; /*v pripade reseni, smazte tento radek!*/
+	solved = 0; /*v pripade reseni, smazte tento radek!*/
 }
+
 
 /*
 ** TRP s explicitně zřetězenými synonymy.
@@ -109,33 +117,35 @@ void htInsert ( tHTable* ptrht, tKey key, tData data ) {
 **
 ** Využijte dříve vytvořenou funkci HTSearch.
 */
+tData *htRead(tHTable *ptrht, tKey key)
+{
 
-tData* htRead ( tHTable* ptrht, tKey key ) {
-
- solved = 0; /*v pripade reseni, smazte tento radek!*/
+	solved = 0; /*v pripade reseni, smazte tento radek!*/
 }
+
 
 /*
 ** TRP s explicitně zřetězenými synonymy.
 ** Tato procedura vyjme položku s klíčem key z tabulky
-** ptrht.  Uvolněnou položku korektně zrušte.  Pokud položka s uvedeným
+** ptrht. Uvolněnou položku korektně zrušte. Pokud položka s uvedeným
 ** klíčem neexistuje, dělejte, jako kdyby se nic nestalo (tj. nedělejte
 ** nic).
 **
 ** V tomto případě NEVYUŽÍVEJTE dříve vytvořenou funkci HTSearch.
 */
+void htDelete(tHTable *ptrht, tKey key)
+{
 
-void htDelete ( tHTable* ptrht, tKey key ) {
-
- solved = 0; /*v pripade reseni, smazte tento radek!*/
+	solved = 0; /*v pripade reseni, smazte tento radek!*/
 }
+
 
 /* TRP s explicitně zřetězenými synonymy.
 ** Tato procedura zruší všechny položky tabulky, korektně uvolní prostor,
 ** který tyto položky zabíraly, a uvede tabulku do počátečního stavu.
 */
+void htClearAll(tHTable *ptrht)
+{
 
-void htClearAll ( tHTable* ptrht ) {
-
- solved = 0; /*v pripade reseni, smazte tento radek!*/
+	solved = 0; /*v pripade reseni, smazte tento radek!*/
 }

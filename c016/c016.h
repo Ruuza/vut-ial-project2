@@ -1,7 +1,6 @@
-
 /* Hlavičkový soubor pro c016.h - Tabulka s Rozptýlenými Položkami,
 **  obsahuje jednak nutné includes a externované proměnné,
-**  ale rovnež definici datových typů. Tento soubor neupravujte!
+**  ale rovnež definici datových typů.
 **  Téma:  Tabulka s explicitně zřetězenými synonymy
 **                      První implementace: Petr Přikryl, prosinec 1994
 **                      Do jazyka C prepsal a upravil: Vaclav Topinka, 2005
@@ -9,7 +8,7 @@
 **                      Úpravy: Radek Hranický, říjen 2014
 **                      Úpravy: Radek Hranický, listopad 2015
 **                      Úpravy: Radek Hranický, říjen 2016
-**
+**                      Úpravy: Dominik Harmim <xharmi00@stud.fit.vutbr.cz>, říjen 2017
 ***/
 
 
@@ -19,7 +18,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-extern int solved;			/* externi promenna pouzivana v testeru */
+
+extern int solved; /* externi promenna pouzivana v testeru */
 
 /* Maximální velikost pole pro implementaci
    vyhledávací tabulky. Řešené procedury však
@@ -28,45 +28,47 @@ extern int solved;			/* externi promenna pouzivana v testeru */
 #define MAX_HTSIZE 101
 
 /* typ klíče (například identifikace zboží) */
-typedef char* tKey;
+typedef char *tKey;
 
 /* typ obsahu (například cena zboží) */
 typedef float tData;
 
-/*Datová položka TRP s explicitně řetězenými synonymy*/
- typedef struct tHTItem{
-	tKey key;				/* klíč  */
-	tData data;				/* obsah */
-	struct tHTItem* ptrnext;	/* ukazatel na další synonymum */
+/* Datová položka TRP s explicitně řetězenými synonymy */
+typedef struct tHTItem
+{
+	tKey key; /* klíč */
+	tData data; /* obsah */
+	struct tHTItem *ptrnext; /* ukazatel na další synonymum */
 } tHTItem;
 
 /* TRP s explicitně zřetězenými synonymy. */
-typedef tHTItem* tHTable[MAX_HTSIZE];
+typedef tHTItem *tHTable[MAX_HTSIZE];
 
 /* Pro účely testování je vhodné mít možnost volby velikosti pole,
    kterým je vyhledávací tabulka implementována. Fyzicky je deklarováno
    pole o rozměru MAX_HTSIZE, ale při implementaci vašich procedur uvažujte
-   velikost HTSIZE.  Ve skriptu se před voláním řešených procedur musí
+   velikost HTSIZE. Ve skriptu se před voláním řešených procedur musí
    objevit příkaz HTSIZE N, kde N je velikost požadovaného prostoru.
-   
+
    POZOR! Pro správnou funkci TRP musí být hodnota této proměnné prvočíslem.
 */
 extern int HTSIZE;
 
+
 /* Hlavičky řešených procedur a funkcí. */
 
-int hashCode ( tKey key );
+int hashCode(tKey key);
 
-void htInit ( tHTable* ptrht );
+void htInit(tHTable *ptrht);
 
-tHTItem* htSearch ( tHTable* ptrht, tKey key );
+tHTItem *htSearch(tHTable *ptrht, tKey key);
 
-void htInsert ( tHTable* ptrht, tKey key, tData data );
+void htInsert(tHTable *ptrht, tKey key, tData data);
 
-tData* htRead ( tHTable* ptrht, tKey key );
+tData *htRead(tHTable *ptrht, tKey key);
 
-void htDelete ( tHTable* ptrht, tKey key );
+void htDelete(tHTable *ptrht, tKey key);
 
-void htClearAll ( tHTable* ptrht );
+void htClearAll(tHTable *ptrht);
 
 #endif
