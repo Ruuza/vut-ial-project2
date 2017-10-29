@@ -1,8 +1,8 @@
-
 /* Hlavičkový soubor pro c401.c - rekurzívní implementace operaci nad BVS,
-obsahuje jednak nutné knihovny a externí proměnné, ale rovněž 
-definici datových typů, se kterými se pracuje v jdenotlivých
-funkcích. Nemodifikovat! */
+   obsahuje jednak nutné knihovny a externí proměnné, ale rovněž
+   definici datových typů, se kterými se pracuje v jdenotlivých
+   funkcích.
+*/
 
 /* ********************** SOUBOR S HLAVIČKOU ********************** */
 /* ********************** ------------------ ********************** */
@@ -15,33 +15,39 @@ funkcích. Nemodifikovat! */
     upravil: Karel Masařík, říjen 2013                               
     upravil: Radek Hranický, říjen 2014                              
     upravil: Radek Hranický, listopad 2015                              
-    upravil: Radek Hranický, říjen 2016                              */
+    upravil: Radek Hranický, říjen 2016
+    upravil: Dominik Harmim <xharmi00@stud.fit.vutbr.cz>, říjen 2017
+*/
 /* ***************************************************************** */
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+
 
 #define TRUE 1
 #define FALSE 0
 
-extern int solved;                        /* indikace, zda byla funkce řešena */
+extern int solved; /* indikace, zda byla funkce řešena */
 
 /* uzel stromu */
-                                                                                                            
-typedef struct tBSTNode {
-	char Key;			                                                      /* klíč */
-	int BSTNodeCont;                                            /* užitečný obsah uzlu */
-	struct tBSTNode * LPtr;                                    /* levý podstrom */
-	struct tBSTNode * RPtr;                                   /* pravý podstrom */
-} *tBSTNodePtr;	
+typedef struct tBSTNode
+{
+	char Key; /* klíč */
+	int BSTNodeCont; /* užitečný obsah uzlu */
+	struct tBSTNode *LPtr; /* levý podstrom */
+	struct tBSTNode *RPtr; /* pravý podstrom */
+} *tBSTNodePtr;
+
 
 /* prototypy funkcí */
 
-void BSTInit   (tBSTNodePtr *);
-int BSTSearch  (tBSTNodePtr, char, int *);
-void BSTInsert (tBSTNodePtr *, char, int);
-void BSTDelete (tBSTNodePtr *, char);
-void BSTDispose(tBSTNodePtr *);
+void BSTInit(tBSTNodePtr *);
 
-/* konec c401.h */
+int BSTSearch(tBSTNodePtr, char, int *);
+
+void BSTInsert(tBSTNodePtr *, char, int);
+
+void BSTDelete(tBSTNodePtr *, char);
+
+void BSTDispose(tBSTNodePtr *);

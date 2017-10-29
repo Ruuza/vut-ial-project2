@@ -1,4 +1,3 @@
-
 /* c401.c: **********************************************************}
 {* Téma: Rekurzivní implementace operací nad BVS
 **                                         Vytvořil: Petr Přikryl, listopad 1994
@@ -11,6 +10,7 @@
 **                                         Úpravy: Radek Hranický, říjen 2014
 **                                         Úpravy: Radek Hranický, listopad 2015
 **                                         Úpravy: Radek Hranický, říjen 2016
+**          Implementace: Dominik Harmim <xharmi00@stud.fit.vutbr.cz>, říjen 2017
 **
 ** Implementujte rekurzivním způsobem operace nad binárním vyhledávacím
 ** stromem (BVS; v angličtině BST - Binary Search Tree).
@@ -40,9 +40,13 @@
 **/
 
 #include "c401.h"
+
+
 int solved;
 
-void BSTInit (tBSTNodePtr *RootPtr) {
+
+void BSTInit(tBSTNodePtr *RootPtr)
+{
 /*   -------
 ** Funkce provede počáteční inicializaci stromu před jeho prvním použitím.
 **
@@ -52,19 +56,17 @@ void BSTInit (tBSTNodePtr *RootPtr) {
 ** byla volána pouze jednou, a to před vlastní prací s BVS. Provedení
 ** inicializace nad neprázdným stromem by totiž mohlo vést ke ztrátě přístupu
 ** k dynamicky alokované paměti (tzv. "memory leak").
-**	
+**
 ** Všimněte si, že se v hlavičce objevuje typ ukazatel na ukazatel.	
 ** Proto je třeba při přiřazení přes RootPtr použít dereferenční operátor *.
 ** Ten bude použit i ve funkcích BSTDelete, BSTInsert a BSTDispose.
 **/
-	
-	
-	
-	 solved = FALSE;		  /* V případě řešení smažte tento řádek! */	
-	
-}	
 
-int BSTSearch (tBSTNodePtr RootPtr, char K, int *Content)	{
+}
+
+
+int BSTSearch(tBSTNodePtr RootPtr, char K, int *Content)
+{
 /*  ---------
 ** Funkce vyhledá uzel v BVS s klíčem K.
 **
@@ -78,15 +80,16 @@ int BSTSearch (tBSTNodePtr RootPtr, char K, int *Content)	{
 ** problém řešte rekurzivním volání této funkce, přičemž nedeklarujte žádnou
 ** pomocnou funkci.
 **/
-							   
-	
-
-	 solved = FALSE;		  /* V případě řešení smažte tento řádek! */	
-	
-} 
 
 
-void BSTInsert (tBSTNodePtr* RootPtr, char K, int Content)	{	
+
+	solved = FALSE;          /* V případě řešení smažte tento řádek! */
+
+}
+
+
+void BSTInsert(tBSTNodePtr *RootPtr, char K, int Content)
+{
 /*   ---------
 ** Vloží do stromu RootPtr hodnotu Content s klíčem K.
 **
@@ -102,14 +105,16 @@ void BSTInsert (tBSTNodePtr* RootPtr, char K, int Content)	{
 ** rychlosti, tak z hlediska paměťových nároků. Zde jde ale o školní
 ** příklad, na kterém si chceme ukázat eleganci rekurzivního zápisu.
 **/
-		
-	
-	
-	 solved = FALSE;		  /* V případě řešení smažte tento řádek! */	
-	
+
+
+
+	solved = FALSE;          /* V případě řešení smažte tento řádek! */
+
 }
 
-void ReplaceByRightmost (tBSTNodePtr PtrReplaced, tBSTNodePtr *RootPtr) {
+
+void ReplaceByRightmost(tBSTNodePtr PtrReplaced, tBSTNodePtr *RootPtr)
+{
 /*   ------------------
 ** Pomocná funkce pro vyhledání, přesun a uvolnění nejpravějšího uzlu.
 **
@@ -121,14 +126,16 @@ void ReplaceByRightmost (tBSTNodePtr PtrReplaced, tBSTNodePtr *RootPtr) {
 ** Tato pomocná funkce bude použita dále. Než ji začnete implementovat,
 ** přečtěte si komentář k funkci BSTDelete(). 
 **/
-	
-	
-		
-	 solved = FALSE;		  /* V případě řešení smažte tento řádek! */	
-	
+
+
+
+	solved = FALSE;          /* V případě řešení smažte tento řádek! */
+
 }
 
-void BSTDelete (tBSTNodePtr *RootPtr, char K) 		{
+
+void BSTDelete(tBSTNodePtr *RootPtr, char K)
+{
 /*   ---------
 ** Zruší uzel stromu, který obsahuje klíč K.
 **
@@ -140,14 +147,16 @@ void BSTDelete (tBSTNodePtr *RootPtr, char K) 		{
 ** Tuto funkci implementujte rekurzivně s využitím dříve deklarované
 ** pomocné funkce ReplaceByRightmost.
 **/
-	
-	
-	
-	 solved = FALSE;		  /* V případě řešení smažte tento řádek! */	
 
-} 
 
-void BSTDispose (tBSTNodePtr *RootPtr) {	
+
+	solved = FALSE;          /* V případě řešení smažte tento řádek! */
+
+}
+
+
+void BSTDispose(tBSTNodePtr *RootPtr)
+{
 /*   ----------
 ** Zruší celý binární vyhledávací strom a korektně uvolní paměť.
 **
@@ -155,11 +164,8 @@ void BSTDispose (tBSTNodePtr *RootPtr) {
 ** inicializaci. Tuto funkci implementujte rekurzivně bez deklarování pomocné
 ** funkce.
 **/
-	
 
-	 solved = FALSE;		  /* V případě řešení smažte tento řádek! */	
+
+	solved = FALSE;          /* V případě řešení smažte tento řádek! */
 
 }
-
-/* konec c401.c */
-
