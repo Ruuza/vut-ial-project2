@@ -211,15 +211,18 @@ void htDelete(tHTable *ptrht, tKey key)
 */
 void htClearAll(tHTable *ptrht)
 {
-	tHTItem *item;
+	tHTItem *item, *item_to_delete;
 
 	// průchod přes všechny indexy tabulky
 	for (int i = 0; i < HTSIZE; i++)
 	{
 		// průchod přes všechny položky zřetězených seznamů
-		for ((item = (*ptrht)[i]); item; item = item->ptrnext)
+		item = (*ptrht)[i];
+		while (item)
 		{
-			free(item); // uvolnění položky z paměti
+			item_to_delete = item;
+			item = item->ptrnext;
+			free(item_to_delete); // uvolnění položky z paměti
 		}
 		(*ptrht)[i] = NULL; // nastavení ukazatele na daném indexu na hodnotu NULL
 	}
