@@ -229,6 +229,53 @@ int main(int argc, char *argv[])
 	use_insert(ptrht, "velvet", 28.00);
 	htPrintTable(ptrht);
 
+	printf("\n---------------------------\n");
+	printf("Hash Table - testing script - advanced tests\n");
+	printf("---------------------------\n");
+
+	printf("\n[TEST01] Read non-existing item\n");
+	use_read(ptrht, "foo");
+
+	printf("\n[TEST02] Clear all for more items\n");
+	use_insert(ptrht, "gambrinus", 18.50);
+	use_insert(ptrht, "krusovice", 21.50);
+	use_insert(ptrht, "plzen", 25.00);
+	use_insert(ptrht, "kofola", 16.00);
+	htPrintTable(ptrht);
+	use_clear_all(ptrht);
+	htPrintTable(ptrht);
+
+	printf("\n[TEST03] Clear all for empty table\n");
+	use_clear_all(ptrht);
+	htPrintTable(ptrht);
+
+	printf("\n[TEST04] Search synonyms\n");
+	use_insert(ptrht, "gambrinus", 18.50);
+	use_insert(ptrht, "krusovice", 21.50);
+	use_insert(ptrht, "plzen", 25.00);
+	use_insert(ptrht, "kofola", 16.00);
+	htPrintTable(ptrht);
+	use_search(ptrht, "gambrinus");
+	use_search(ptrht, "krusovice");
+
+	printf("\n[TEST05] Advanced delete\n");
+	use_insert(ptrht, "fanta", 23.0);
+	use_insert(ptrht, "mirinda", 23.0);
+	use_insert(ptrht, "cappy", 32.0);
+	use_insert(ptrht, "juice", 38.0);
+	use_insert(ptrht, "poutnik", 24.0);
+	use_insert(ptrht, "havana", 52.0);
+	use_insert(ptrht, "martini", 48.0);
+	htPrintTable(ptrht);
+	printf("-- After delete --\n");
+	use_delete(ptrht, "foo");
+	use_delete(ptrht, "plzen");
+	use_delete(ptrht, "cappy");
+	use_delete(ptrht, "juice");
+	use_delete(ptrht, "mirinda");
+	htPrintTable(ptrht);
+
+	use_clear_all(ptrht);
 	free(UNDEFPTR);
 	free(ptrht);
 
