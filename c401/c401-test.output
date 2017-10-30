@@ -508,7 +508,148 @@ Struktura binarniho stromu:
 
 =================================================
 [TEST20]
+Zrusime dalsi uzel (G,7)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Struktura binarniho stromu:
+
+                    +-[Z,10]
+                    |
+                 +-[Y,10]
+                 |
+              +-[Q,10]
+              |  |
+              |  +-[P,10]
+              |
+           +-[O,16]
+           |
+        +-[N,14]
+        |  |
+        |  +-[M,13]
+        |
+     +-[J,10]
+     |  |
+     |  +-[I,9]
+     |
+  +-[F,6]
+     |
+     |  +-[E,5]
+     |  |
+     +-[C,3]
+        |
+        +-[B,2]
+
+=================================================
+[TEST21]
+Přidáme (G,1) a zrušíme uzel (I,9)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Struktura binarniho stromu:
+
+                    +-[Z,10]
+                    |
+                 +-[Y,10]
+                 |
+              +-[Q,10]
+              |  |
+              |  +-[P,10]
+              |
+           +-[O,16]
+           |
+        +-[N,14]
+        |  |
+        |  +-[M,13]
+        |
+     +-[J,10]
+     |  |
+     |  +-[I,9]
+     |     |
+     |     +-[G,1]
+     |
+  +-[F,6]
+     |
+     |  +-[E,5]
+     |  |
+     +-[C,3]
+        |
+        +-[B,2]
+
+=================================================
+Struktura binarniho stromu:
+
+                    +-[Z,10]
+                    |
+                 +-[Y,10]
+                 |
+              +-[Q,10]
+              |  |
+              |  +-[P,10]
+              |
+           +-[O,16]
+           |
+        +-[N,14]
+        |  |
+        |  +-[M,13]
+        |
+     +-[J,10]
+     |  |
+     |  +-[G,1]
+     |
+  +-[F,6]
+     |
+     |  +-[E,5]
+     |  |
+     +-[C,3]
+        |
+        +-[B,2]
+
+=================================================
+[TEST22]
 Nakonec zrusime cely strom
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Struktura binarniho stromu:
+
+strom je prazdny
+
+=================================================
+[TEST23]
+Mazání z prázdného stromu
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Struktura binarniho stromu:
+
+strom je prazdny
+
+=================================================
+[TEST24]
+Zrusime kořenový uzel, ktery ma jen levý podstrom (D,10)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Struktura binarniho stromu:
+
+  +-[D,10]
+     |
+     +-[B,5]
+
+=================================================
+Struktura binarniho stromu:
+
+  +-[B,5]
+
+=================================================
+[TEST25]
+Zrusime kořenový uzel, ktery ma jen pravý podstrom (B,5)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Struktura binarniho stromu:
+
+     +-[E,20]
+     |
+  +-[B,5]
+
+=================================================
+Struktura binarniho stromu:
+
+  +-[E,20]
+
+=================================================
+[TEST26]
+Zrusime kořenový uzel, který je zároveň jediným uzlem (E,20)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 Struktura binarniho stromu:
 

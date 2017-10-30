@@ -57,11 +57,11 @@ void BSTInit(tBSTNodePtr *RootPtr)
 ** inicializace nad neprázdným stromem by totiž mohlo vést ke ztrátě přístupu
 ** k dynamicky alokované paměti (tzv. "memory leak").
 **
-** Všimněte si, že se v hlavičce objevuje typ ukazatel na ukazatel.	
+** Všimněte si, že se v hlavičce objevuje typ ukazatel na ukazatel.
 ** Proto je třeba při přiřazení přes RootPtr použít dereferenční operátor *.
 ** Ten bude použit i ve funkcích BSTDelete, BSTInsert a BSTDispose.
 **/
-
+	*RootPtr = NULL; // nastavení hodnoty ukazatele na kořen BVS na hodnotu NULL
 }
 
 
@@ -71,7 +71,7 @@ int BSTSearch(tBSTNodePtr RootPtr, char K, int *Content)
 ** Funkce vyhledá uzel v BVS s klíčem K.
 **
 ** Pokud je takový nalezen, vrací funkce hodnotu TRUE a v proměnné Content se
-** vrací obsah příslušného uzlu.´Pokud příslušný uzel není nalezen, vrací funkce
+** vrací obsah příslušného uzlu. Pokud příslušný uzel není nalezen, vrací funkce
 ** hodnotu FALSE a obsah proměnné Content není definován (nic do ní proto
 ** nepřiřazujte).
 **
@@ -80,11 +80,28 @@ int BSTSearch(tBSTNodePtr RootPtr, char K, int *Content)
 ** problém řešte rekurzivním volání této funkce, přičemž nedeklarujte žádnou
 ** pomocnou funkci.
 **/
+	// Pokud bude ukazatel na kořen NULL, tak vrátíme FALSE. (Ukončení rekurze v případě, že položka nebyla nalezena.)
+	if (!RootPtr)
+	{
+		return FALSE;
+	}
 
+	// Uzel s klíčem K byl nalezen. (Ukončení rekurze v případě, že byla položka nalezena.)
+	if (RootPtr->Key == K)
+	{
+		// Vrácení obsahu nalezeného uzlu v proměnné Content a vrácení TRUE.
+		*Content = RootPtr->BSTNodeCont;
+		return TRUE;
+	}
 
+	// Hledaný klíč je menší než klíč kořene, proto zavoláme funkci rekurzívně pro levý podstrom.
+	if (K < RootPtr->Key)
+	{
+		return BSTSearch(RootPtr->LPtr, K, Content);
+	}
 
-	solved = FALSE;          /* V případě řešení smažte tento řádek! */
-
+	// Hledaný klíč je větší než klíč kořene, proto zavoláme funkci rekurzívně pro pravý podstrom.
+	return BSTSearch(RootPtr->RPtr, K, Content);
 }
 
 
@@ -105,11 +122,38 @@ void BSTInsert(tBSTNodePtr *RootPtr, char K, int Content)
 ** rychlosti, tak z hlediska paměťových nároků. Zde jde ale o školní
 ** příklad, na kterém si chceme ukázat eleganci rekurzivního zápisu.
 **/
+	if (!*RootPtr) // strom je prázdný (ukončení rekurze)
+	{
+		// vložená položka bude kořenem stromu
+		if (!((*RootPtr) = (tBSTNodePtr) malloc(sizeof(struct tBSTNode))))
+		{
+			return; // malloc selhal
+		}
+		// nastavení parametrů vložené položky
+		(*RootPtr)->Key = K;
+		(*RootPtr)->BSTNodeCont = Content;
+		(*RootPtr)->LPtr = (*RootPtr)->RPtr = NULL;
 
+		return;
+	}
 
+	if ((*RootPtr)->Key == K) // uzel se zadaným klíčem již ve stromu existuje
+	{
+		// nahrazení hodnoty uzlu s existujícím klíčem
+		(*RootPtr)->BSTNodeCont = Content;
+		return;
+	}
 
-	solved = FALSE;          /* V případě řešení smažte tento řádek! */
+	if (K < (*RootPtr)->Key) // zadaný klíč je menší než klíč kořene
+	{
+		// Zavoláme funkci rekurzívně pro levý podstrom.
+		BSTInsert(&((*RootPtr)->LPtr), K, Content);
+		return;
+	}
 
+	// zadaný klíč je větší než klíč kořene
+	// Zavoláme funkci rekurzívně pro pravý podstrom.
+	BSTInsert(&((*RootPtr)->RPtr), K, Content);
 }
 
 
@@ -126,11 +170,50 @@ void ReplaceByRightmost(tBSTNodePtr PtrReplaced, tBSTNodePtr *RootPtr)
 ** Tato pomocná funkce bude použita dále. Než ji začnete implementovat,
 ** přečtěte si komentář k funkci BSTDelete(). 
 **/
+	tBSTNodePtr right_most;
 
+	if (!(*RootPtr)->RPtr) // kořen nemá žádný pravý podstrom (může nastat pouze v případě vnějšího volání funkce)
+	{
+		right_most = *RootPtr; // Nejpravější uzel je sám kořen, ten bude smazán.
 
+		// přesun hodnot z nejpravějšího uzlu
+		PtrReplaced->Key = right_most->Key;
+		PtrReplaced->BSTNodeCont = right_most->BSTNodeCont;
 
-	solved = FALSE;          /* V případě řešení smažte tento řádek! */
+		// Pokud nejpravější uzel měl levý podstrom, je potřeba nastavit tento jako levý podstrom
+		// uzlu, do kterého se přesouvá jeho hodnota, jinak je potřeba nastavit tento ukazatel na NULL.
+		PtrReplaced->LPtr = NULL;
+		if (right_most->LPtr)
+		{
+			PtrReplaced->LPtr = right_most->LPtr;
+		}
 
+		free(right_most); // uvolnění nejpravějšího uzlu
+		return;
+	}
+
+	if (!(*RootPtr)->RPtr->RPtr) // pravý podstrom nemá žádný další pravý podstrom (ukončení rekurze)
+	{
+		right_most = (*RootPtr)->RPtr; // nejpravější uzel je pravý podstrom kořenového uzlu
+
+		// přesun hodnot z nejpravějšího uzlu
+		PtrReplaced->Key = right_most->Key;
+		PtrReplaced->BSTNodeCont = right_most->BSTNodeCont;
+
+		// Pokud nejpravější uzel měl levý podstrom, je potřeba nastavit tento jako pravý podstrom kořenového
+		// uzlu, jinak je potřeba nastavit tento ukazatel na NULL.
+		(*RootPtr)->RPtr = NULL;
+		if (right_most->LPtr)
+		{
+			(*RootPtr)->RPtr = right_most->LPtr;
+		}
+
+		free(right_most); // uvolnění nejpravějšího uzlu
+		return;
+	}
+
+	// zavolání funkce rekurzívně pro pravý podstrom
+	ReplaceByRightmost(PtrReplaced, &((*RootPtr)->RPtr));
 }
 
 
@@ -147,11 +230,109 @@ void BSTDelete(tBSTNodePtr *RootPtr, char K)
 ** Tuto funkci implementujte rekurzivně s využitím dříve deklarované
 ** pomocné funkce ReplaceByRightmost.
 **/
+	if (!*RootPtr) // strom je prázdný (ukončení rekurze)
+	{
+		return;
+	}
 
+	tBSTNodePtr node_to_delete;
 
+	////////// hledaný klíč je menší než klíč kořene
+	if (K < (*RootPtr)->Key)
+	{
+		if ((*RootPtr)->LPtr && (*RootPtr)->LPtr->Key == K) // klíč kořene levého podstromu je hledaný klíč
+		{
+			node_to_delete = (*RootPtr)->LPtr;
 
-	solved = FALSE;          /* V případě řešení smažte tento řádek! */
+			if (node_to_delete->LPtr && node_to_delete->RPtr) // uzel má dva podstromy
+			{
+				// nahrazení uzlu nejpravějším uzlem levého podstromu
+				ReplaceByRightmost(node_to_delete, &(node_to_delete->LPtr));
+				return;
+			}
 
+			if (node_to_delete->LPtr && !node_to_delete->RPtr) // uzel má pouze levý podstrom
+			{
+				(*RootPtr)->LPtr = node_to_delete->LPtr; // korekce ukazatele v otci
+			}
+			else if (!node_to_delete->LPtr && node_to_delete->RPtr) // uzel má pouze pravý podstrom
+			{
+				(*RootPtr)->LPtr = node_to_delete->RPtr; // korekce ukazatele v otci
+			}
+			else // uzel nemá žádný podstrom
+			{
+				(*RootPtr)->LPtr = NULL; // korekce ukazatele v otci
+			}
+
+			free(node_to_delete); // uvolnění mazaného uzlu z paměti
+			return;
+		}
+
+		// zavolání funkce rekurzívně pro levý podstrom
+		BSTDelete(&((*RootPtr)->LPtr), K);
+		return;
+	}
+
+	////////// hledaný klíč je větší než klíč kořene
+	if (K > (*RootPtr)->Key)
+	{
+		if ((*RootPtr)->RPtr && (*RootPtr)->RPtr->Key == K) // klíč kořene pravého podstromu je hledaný klíč
+		{
+			node_to_delete = (*RootPtr)->RPtr;
+
+			if (node_to_delete->LPtr && node_to_delete->RPtr) // uzel má dva podstromy
+			{
+				// nahrazení uzlu nejpravějším uzlem levého podstromu
+				ReplaceByRightmost(node_to_delete, &(node_to_delete->LPtr));
+				return;
+			}
+
+			if (node_to_delete->LPtr && !node_to_delete->RPtr) // uzel má pouze levý podstrom
+			{
+				(*RootPtr)->RPtr = node_to_delete->LPtr; // korekce ukazatele v otci
+			}
+			else if (!node_to_delete->LPtr && node_to_delete->RPtr) // uzel má pouze pravý podstrom
+			{
+				(*RootPtr)->RPtr = node_to_delete->RPtr; // korekce ukazatele v otci
+			}
+			else // uzel nemá žádný podstrom
+			{
+				(*RootPtr)->RPtr = NULL; // korekce ukazatele v otci
+			}
+
+			free(node_to_delete); // uvolnění mazaného uzlu z paměti
+			return;
+		}
+
+		// zavolání funkce rekurzívně pro pravý podstrom
+		BSTDelete(&((*RootPtr)->RPtr), K);
+		return;
+	}
+
+	////////// hledaný klíč je klíč kořene
+	node_to_delete = *RootPtr;
+
+	if (node_to_delete->LPtr && node_to_delete->RPtr) // uzel má dva podstromy
+	{
+		// nahrazení uzlu nejpravějším uzlem levého podstromu
+		ReplaceByRightmost(node_to_delete, &(node_to_delete->LPtr));
+		return;
+	}
+
+	if (node_to_delete->LPtr && !node_to_delete->RPtr) // uzel má pouze levý podstrom
+	{
+		*RootPtr = node_to_delete->LPtr; // kořenový uzel bude levý podstrom
+	}
+	else if (!node_to_delete->LPtr && node_to_delete->RPtr) // uzel má pouze pravý podstrom
+	{
+		*RootPtr = node_to_delete->RPtr; // kořenový uzel bude pravý podstrom
+	}
+	else // uzel nemá žádný podstrom
+	{
+		*RootPtr = NULL; // kořenový uzel bude NULL
+	}
+
+	free(node_to_delete); // uvolnění mazaného uzlu z paměti
 }
 
 
@@ -164,8 +345,17 @@ void BSTDispose(tBSTNodePtr *RootPtr)
 ** inicializaci. Tuto funkci implementujte rekurzivně bez deklarování pomocné
 ** funkce.
 **/
+	// Ukazatel na kořen je NULL. (podmínka ukončení rekurze)
+	if (!*RootPtr)
+	{
+		return;
+	}
 
+	// Zavoláme funkci rekurzívně pro levý i pravý podstrom.
+	BSTDispose(&((*RootPtr)->LPtr));
+	BSTDispose(&((*RootPtr)->RPtr));
 
-	solved = FALSE;          /* V případě řešení smažte tento řádek! */
-
+	// Uvolnění ukazatele na kořen z paměti a nastavení na hodnotu NULL.
+	free(*RootPtr);
+	*RootPtr = NULL;
 }

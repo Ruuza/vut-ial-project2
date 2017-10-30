@@ -313,9 +313,52 @@ int main(int argc, char *argv[])
 	test_BSTDelete(&TempTree, K);
 
 	printf("[TEST20]\n");
+	printf("Zrusime dalsi uzel (G,7)\n");
+	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+	K = 'G';
+	test_BSTDelete(&TempTree, K);
+
+	printf("[TEST21]\n");
+	printf("Přidáme (G,1) a zrušíme uzel (I,9)\n");
+	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+	BSTInsert(&TempTree, 'G', 1);
+	Print_tree(TempTree);
+	K = 'I';
+	test_BSTDelete(&TempTree, K);
+
+	printf("[TEST22]\n");
 	printf("Nakonec zrusime cely strom\n");
 	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 	test_BSTDispose(&TempTree);
+
+	printf("[TEST23]\n");
+	printf("Mazání z prázdného stromu\n");
+	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+	K = 'A';
+	test_BSTDelete(&TempTree, K);
+
+	printf("[TEST24]\n");
+	printf("Zrusime kořenový uzel, ktery ma jen levý podstrom (D,10)\n");
+	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+	BSTInsert(&TempTree, 'D', 10);
+	BSTInsert(&TempTree, 'B', 5);
+	Print_tree(TempTree);
+	K = 'D';
+	test_BSTDelete(&TempTree, K);
+
+	printf("[TEST25]\n");
+	printf("Zrusime kořenový uzel, ktery ma jen pravý podstrom (B,5)\n");
+	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+	BSTInsert(&TempTree, 'E', 20);
+	Print_tree(TempTree);
+	K = 'B';
+	test_BSTDelete(&TempTree, K);
+
+	printf("[TEST26]\n");
+	printf("Zrusime kořenový uzel, který je zároveň jediným uzlem (E,20)\n");
+	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+	K = 'E';
+	test_BSTDelete(&TempTree, K);
 
 	printf("------------------------------ konec -------------------------------------\n");
 
