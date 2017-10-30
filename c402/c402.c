@@ -1,15 +1,15 @@
-
 /* c402.c: ********************************************************************}
 {* Téma: Nerekurzivní implementace operací nad BVS 
 **                                     Implementace: Petr Přikryl, prosinec 1994
 **                                           Úpravy: Petr Přikryl, listopad 1997
 **                                                     Petr Přikryl, květen 1998
-**			  	                        Převod do jazyka C: Martin Tuček, srpen 2005
+**                                  Převod do jazyka C: Martin Tuček, srpen 2005
 **                                         Úpravy: Bohuslav Křena, listopad 2009
 **                                         Úpravy: Karel Masařík, říjen 2013
 **                                         Úpravy: Radek Hranický, říjen 2014
 **                                         Úpravy: Radek Hranický, listopad 2015
 **                                         Úpravy: Radek Hranický, říjen 2016
+**         Implementace: Dominik Harmim <xharmi00@stud.fit.vutbr.cz>, říjen 2017
 **
 ** S využitím dynamického přidělování paměti, implementujte NEREKURZIVNĚ
 ** následující operace nad binárním vyhledávacím stromem (předpona BT znamená
@@ -45,7 +45,7 @@
 ** Při průchodech stromem použijte ke zpracování uzlu funkci BTWorkOut().
 ** Pro zjednodušení práce máte předem připraveny zásobníky pro hodnoty typu
 ** bool a tBTNodePtr. Pomocnou funkci BTWorkOut ani funkce pro práci
-** s pomocnými zásobníky neupravujte 
+** s pomocnými zásobníky neupravujte.
 ** Pozor! Je třeba správně rozlišovat, kdy použít dereferenční operátor *
 ** (typicky při modifikaci) a kdy budeme pracovat pouze se samotným ukazatelem 
 ** (např. při vyhledávání). V tomto příkladu vám napoví prototypy funkcí.
@@ -53,123 +53,153 @@
 **/
 
 #include "c402.h"
+
+
 int solved;
 
-void BTWorkOut (tBTNodePtr Ptr)		{
+
+void BTWorkOut(tBTNodePtr Ptr)
+{
 /*   ---------
 ** Pomocná funkce, kterou budete volat při průchodech stromem pro zpracování
 ** uzlu určeného ukazatelem Ptr. Tuto funkci neupravujte.
 **/
-			
-	if (Ptr==NULL) 
-    printf("Chyba: Funkce BTWorkOut byla volána s NULL argumentem!\n");
-  else 
-    printf("Výpis hodnoty daného uzlu> %d\n",Ptr->Cont);
+	if (Ptr == NULL)
+	{
+		printf("Chyba: Funkce BTWorkOut byla volána s NULL argumentem!\n");
+	}
+	else
+	{
+		printf("Výpis hodnoty daného uzlu> %d\n", Ptr->Cont);
+	}
 }
-	
+
+
 /* -------------------------------------------------------------------------- */
 /*
 ** Funkce pro zásobník hotnot typu tBTNodePtr. Tyto funkce neupravujte.
 **/
 
-void SInitP (tStackP *S)  
+void SInitP(tStackP *S)
 /*   ------
 ** Inicializace zásobníku.
 **/
 {
-	S->top = 0;  
-}	
+	S->top = 0;
+}
 
-void SPushP (tStackP *S, tBTNodePtr ptr)
+
+void SPushP(tStackP *S, tBTNodePtr ptr)
 /*   ------
 ** Vloží hodnotu na vrchol zásobníku.
 **/
-{ 
-                 /* Při implementaci v poli může dojít k přetečení zásobníku. */
-  if (S->top==MAXSTACK) 
-    printf("Chyba: Došlo k přetečení zásobníku s ukazateli!\n");
-  else {  
-		S->top++;  
-		S->a[S->top]=ptr;
+{
+	/* Při implementaci v poli může dojít k přetečení zásobníku. */
+	if (S->top == MAXSTACK)
+	{
+		printf("Chyba: Došlo k přetečení zásobníku s ukazateli!\n");
 	}
-}	
+	else
+	{
+		S->top++;
+		S->a[S->top] = ptr;
+	}
+}
 
-tBTNodePtr STopPopP (tStackP *S)
+
+tBTNodePtr STopPopP(tStackP *S)
 /*         --------
 ** Odstraní prvek z vrcholu zásobníku a současně vrátí jeho hodnotu.
 **/
 {
-                            /* Operace nad prázdným zásobníkem způsobí chybu. */
-	if (S->top==0)  {
+	/* Operace nad prázdným zásobníkem způsobí chybu. */
+	if (S->top == 0)
+	{
 		printf("Chyba: Došlo k podtečení zásobníku s ukazateli!\n");
-		return(NULL);	
-	}	
-	else {
-		return (S->a[S->top--]);
-	}	
+		return NULL;
+	}
+	else
+	{
+		return S->a[S->top--];
+	}
 }
 
-bool SEmptyP (tStackP *S)
+
+bool SEmptyP(tStackP *S)
 /*   -------
 ** Je-li zásobník prázdný, vrátí hodnotu true.
 **/
 {
-  return(S->top==0);
-}	
+	return S->top == 0;
+}
+
 
 /* -------------------------------------------------------------------------- */
 /*
 ** Funkce pro zásobník hotnot typu bool. Tyto funkce neupravujte.
 */
 
-void SInitB (tStackB *S) {
+void SInitB(tStackB *S)
+{
 /*   ------
 ** Inicializace zásobníku.
 **/
+	S->top = 0;
+}
 
-	S->top = 0;  
-}	
 
-void SPushB (tStackB *S,bool val) {
+void SPushB(tStackB *S, bool val)
+{
 /*   ------
 ** Vloží hodnotu na vrchol zásobníku.
 **/
-                 /* Při implementaci v poli může dojít k přetečení zásobníku. */
-	if (S->top==MAXSTACK) 
+	/* Při implementaci v poli může dojít k přetečení zásobníku. */
+	if (S->top == MAXSTACK)
+	{
 		printf("Chyba: Došlo k přetečení zásobníku pro boolean!\n");
-	else {
-		S->top++;  
-		S->a[S->top]=val;
-	}	
+	}
+	else
+	{
+		S->top++;
+		S->a[S->top] = val;
+	}
 }
 
-bool STopPopB (tStackB *S) {
+
+bool STopPopB(tStackB *S)
+{
 /*   --------
 ** Odstraní prvek z vrcholu zásobníku a současně vrátí jeho hodnotu.
 **/
-                            /* Operace nad prázdným zásobníkem způsobí chybu. */
-	if (S->top==0) {
+	/* Operace nad prázdným zásobníkem způsobí chybu. */
+	if (S->top == 0)
+	{
 		printf("Chyba: Došlo k podtečení zásobníku pro boolean!\n");
-		return(NULL);	
-	}	
-	else {  
-		return(S->a[S->top--]); 
-	}	
+		return NULL;
+	}
+	else
+	{
+		return S->a[S->top--];
+	}
 }
 
-bool SEmptyB (tStackB *S) {
+
+bool SEmptyB(tStackB *S)
+{
 /*   -------
 ** Je-li zásobník prázdný, vrátí hodnotu true.
 **/
-  return(S->top==0);
+	return S->top == 0;
 }
+
 
 /* -------------------------------------------------------------------------- */
 /*
 ** Následuje jádro domácí úlohy - funkce, které máte implementovat. 
 */
 
-void BTInit (tBTNodePtr *RootPtr)	{
+void BTInit(tBTNodePtr *RootPtr)
+{
 /*   ------
 ** Provede inicializaci binárního vyhledávacího stromu.
 **
@@ -181,12 +211,14 @@ void BTInit (tBTNodePtr *RootPtr)	{
 ** Všimněte si, že zde se poprvé v hlavičce objevuje typ ukazatel na ukazatel,	
 ** proto je třeba při práci s RootPtr použít dereferenční operátor *.
 **/
-	
-	
-	 solved = FALSE;		  /* V případě řešení smažte tento řádek! */	
+
+
+	solved = FALSE;          /* V případě řešení smažte tento řádek! */
 }
 
-void BTInsert (tBTNodePtr *RootPtr, int Content) {
+
+void BTInsert(tBTNodePtr *RootPtr, int Content)
+{
 /*   --------
 ** Vloží do stromu nový uzel s hodnotou Content.
 **
@@ -196,15 +228,17 @@ void BTInsert (tBTNodePtr *RootPtr, int Content) {
 ** se ve stromu může vyskytnout nejvýše jednou). Pokud se vytváří nový uzel,
 ** vzniká vždy jako list stromu. Funkci implementujte nerekurzivně.
 **/
-	
-	
-		
-	 solved = FALSE;		  /* V případě řešení smažte tento řádek! */	
+
+
+
+	solved = FALSE;          /* V případě řešení smažte tento řádek! */
 }
+
 
 /*                                  PREORDER                                  */
 
-void Leftmost_Preorder (tBTNodePtr ptr, tStackP *Stack)	{
+void Leftmost_Preorder(tBTNodePtr ptr, tStackP *Stack)
+{
 /*   -----------------
 ** Jde po levě větvi podstromu, dokud nenarazí na jeho nejlevější uzel.
 **
@@ -212,55 +246,62 @@ void Leftmost_Preorder (tBTNodePtr ptr, tStackP *Stack)	{
 ** a ukazatele na ně is uložíme do zásobníku.
 **/
 
-	
-	
-	 solved = FALSE;		  /* V případě řešení smažte tento řádek! */	
+
+
+	solved = FALSE;          /* V případě řešení smažte tento řádek! */
 }
 
-void BTPreorder (tBTNodePtr RootPtr)	{
+
+void BTPreorder(tBTNodePtr RootPtr)
+{
 /*   ----------
 ** Průchod stromem typu preorder implementovaný nerekurzivně s využitím funkce
 ** Leftmost_Preorder a zásobníku ukazatelů. Zpracování jednoho uzlu stromu
 ** realizujte jako volání funkce BTWorkOut(). 
 **/
 
-	
-	
-	 solved = FALSE;		  /* V případě řešení smažte tento řádek! */	
+
+
+	solved = FALSE;          /* V případě řešení smažte tento řádek! */
 }
 
 
-/*                                  INORDER                                   */ 
+/*                                  INORDER                                   */
 
-void Leftmost_Inorder(tBTNodePtr ptr, tStackP *Stack)		{
+void Leftmost_Inorder(tBTNodePtr ptr, tStackP *Stack)
+{
 /*   ----------------
 ** Jde po levě větvi podstromu, dokud nenarazí na jeho nejlevější uzel.
 **
 ** Při průchodu Inorder ukládáme ukazatele na všechny navštívené uzly do
 ** zásobníku. 
 **/
-	
-	
-	
-	 solved = FALSE;		  /* V případě řešení smažte tento řádek! */	
-	
+
+
+
+	solved = FALSE;          /* V případě řešení smažte tento řádek! */
+
 }
 
-void BTInorder (tBTNodePtr RootPtr)	{
+
+void BTInorder(tBTNodePtr RootPtr)
+{
 /*   ---------
 ** Průchod stromem typu inorder implementovaný nerekurzivně s využitím funkce
 ** Leftmost_Inorder a zásobníku ukazatelů. Zpracování jednoho uzlu stromu
 ** realizujte jako volání funkce BTWorkOut(). 
 **/
 
-	
-	
-	 solved = FALSE;		  /* V případě řešení smažte tento řádek! */	
+
+
+	solved = FALSE;          /* V případě řešení smažte tento řádek! */
 }
 
-/*                                 POSTORDER                                  */ 
 
-void Leftmost_Postorder (tBTNodePtr ptr, tStackP *StackP, tStackB *StackB) {
+/*                                 POSTORDER                                  */
+
+void Leftmost_Postorder(tBTNodePtr ptr, tStackP *StackP, tStackB *StackB)
+{
 /*           --------
 ** Jde po levě větvi podstromu, dokud nenarazí na jeho nejlevější uzel.
 **
@@ -269,35 +310,35 @@ void Leftmost_Postorder (tBTNodePtr ptr, tStackP *StackP, tStackB *StackB) {
 ** navštíven poprvé a že se tedy ještě nemá zpracovávat. 
 **/
 
-	
-	
-	 solved = FALSE;		  /* V případě řešení smažte tento řádek! */	
+
+
+	solved = FALSE;          /* V případě řešení smažte tento řádek! */
 }
 
-void BTPostorder (tBTNodePtr RootPtr)	{
+
+void BTPostorder(tBTNodePtr RootPtr)
+{
 /*           -----------
 ** Průchod stromem typu postorder implementovaný nerekurzivně s využitím funkce
 ** Leftmost_Postorder, zásobníku ukazatelů a zásobníku hotdnot typu bool.
 ** Zpracování jednoho uzlu stromu realizujte jako volání funkce BTWorkOut(). 
 **/
 
-	
-		
-	 solved = FALSE;		  /* V případě řešení smažte tento řádek! */	
+
+
+	solved = FALSE;          /* V případě řešení smažte tento řádek! */
 }
 
 
-void BTDisposeTree (tBTNodePtr *RootPtr)	{
+void BTDisposeTree(tBTNodePtr *RootPtr)
+{
 /*   -------------
 ** Zruší všechny uzly stromu a korektně uvolní jimi zabranou paměť.
 **
 ** Funkci implementujte nerekurzivně s využitím zásobníku ukazatelů.
 **/
 
-	
-	
-	 solved = FALSE;		  /* V případě řešení smažte tento řádek! */	
+
+
+	solved = FALSE;          /* V případě řešení smažte tento řádek! */
 }
-
-/* konec c402.c */
-
